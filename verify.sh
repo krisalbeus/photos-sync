@@ -9,11 +9,12 @@ require_mounted
 
 BUCKET_PREFIX="${DEST#s3://}"
 BUCKET="${BUCKET_PREFIX%%/*}"
-PREFIX="${BUCKET_PREFIX#*/}/"
+PREFIX=""
+[[ "$BUCKET_PREFIX" == */* ]] && PREFIX="${BUCKET_PREFIX#*/}/"
 
 LISTING="$(mktemp)"
 trap 'rm -f "$LISTING"' EXIT
-aws s3api list-objects-v2 --bucket "$BUCKET" --prefix "$PREFIX" \
+aws s3api list-objects-v2 --bucket "$BUCKET" ${PREFIX:+--prefix "$PREFIX"} \
   --query 'Contents[].{Key:Key,Size:Size}' --output json > "$LISTING"
 
 python3 - "$SRC" "$PREFIX" "$LISTING" "${EXCLUDE_PATTERNS[@]}" <<'PY'

@@ -2,7 +2,7 @@
 
 export AWS_PROFILE="${AWS_PROFILE:-kris}"
 SRC="/Volumes/Photos"
-DEST="s3://kris-albeus-photos-bkp/photos"
+DEST="s3://kris-albeus-photos-bkp"
 STORAGE_CLASS="${STORAGE_CLASS:-DEEP_ARCHIVE}"
 
 # Patterns are relative to SRC. "*" also matches "/", so each name is listed
